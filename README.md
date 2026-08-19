@@ -103,7 +103,7 @@ Os valores ficam normalmente entre **-1 e 1**. Valores mais altos tendem a repre
 
 ## Como executar
 
-As instruções abaixo poderão ser utilizadas após a implementação dos arquivos principais.
+As instruções abaixo baixam imagens Sentinel-2 para Sinop-MT usando o Google Earth Engine.
 
 ### 1. Clonar o repositório
 
@@ -136,7 +136,40 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Executar a aplicação
+### 4. Autenticar no Google Earth Engine
+
+Na primeira execução, o script abrirá o fluxo de autenticação do Earth Engine. Também é possível autenticar antes:
+
+```bash
+earthengine authenticate
+```
+
+Caso sua conta exija um projeto Google Cloud, informe o ID com `--project`.
+
+### 5. Baixar imagens Sentinel-2 de Sinop
+
+```bash
+python baixar_sentinel_sinop.py
+```
+
+Por padrão, o script consulta a coleção `COPERNICUS/S2_SR_HARMONIZED`, recorta uma área em torno de Sinop-MT, filtra imagens com até 20% de nuvens e salva:
+
+- `data/sentinel/sentinel2_sinop_rgb.tif`
+- `data/sentinel/sentinel2_sinop_ndvi.tif`
+
+Também é possível ajustar o período e o filtro de nuvens:
+
+```bash
+python baixar_sentinel_sinop.py --start-date 2025-11-01 --end-date 2026-03-31 --max-cloud 10
+```
+
+Com projeto Google Cloud:
+
+```bash
+python baixar_sentinel_sinop.py --project seu-projeto-google-cloud
+```
+
+### 6. Executar a aplicação
 
 ```bash
 streamlit run app.py
